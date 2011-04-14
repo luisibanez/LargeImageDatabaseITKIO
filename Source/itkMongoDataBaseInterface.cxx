@@ -18,7 +18,7 @@
 
 namespace itk {
 
-int MongoDataBaseInterface::Connect(std::string server, std::string port)
+int MongoDataBaseInterface::Connect(const std::string & serverAndPort )
 {
     // Build the connection string
     std::string connstring(server);

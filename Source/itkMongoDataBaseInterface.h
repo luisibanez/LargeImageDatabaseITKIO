@@ -1,21 +1,24 @@
-/*    Copyright 2010 Kitware Inc.
+/*=========================================================================
  *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ *  Copyright Insight Software Consortium
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 #ifndef __itkMongoDataBaseInterface_h
 #define __itkMongoDataBaseInterface_h
 
-// Include necessary headers for mongo \
+// Include necessary headers for mongo
 
 #include <iostream>
 #include <client/dbclient.h>
@@ -41,22 +44,28 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(MongoDataBaseInterface, DataBaseInterfaceBase);
 
+  // Operations possible
+  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"));
+  virtual int  Insert(const char * path, const char * data, size_t size);
+  virtual int  Query(const char * collection, const char * query);
+  virtual void Result( int i, char * data );
+
+
+protected:
 
     // Constructor
     MongoDataBaseInterface()  {}
+    ~MongoDataBaseInterface();
+    void PrintSelf(std::ostream& os, Indent indent) const;
+
+
+private:
+    MongoDataBaseInterface(const Self&); //purposely not implemented
+    void operator=(const Self&); //purposely not implemented
 
     typedef auto_ptr<mongo::DBClientCursor>  CursorPointer;
 
-    // Operations possible
-    int Connect(std::string server = std::string("127.0.0.1"), std::string port = std::string("27017"));
-    int Insert(const char * name , int num );
-    int Insert(const char * path, mongo::BSONObj  obj);
-    CursorPointer Query(const char * collection, const char  * query);
-    int Result(int i, mongo::BSONObj * r);
-
-private:
-
-    mongo::DBClientConnection conn;
+    mongo::DBClientConnection m_Connection;
 
 };
 
