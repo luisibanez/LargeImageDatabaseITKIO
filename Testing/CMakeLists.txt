@@ -4,12 +4,9 @@
 set(KIT LargeImageDataBase)
 
 create_test_sourcelist(Tests ${KIT}TestDriver.cxx
-  itkDiscreteGaussianImageFilterTest2.cxx
-  itkSmoothingRecursiveGaussianImageFilterTest.cxx
-  itkMeanImageFilterTest.cxx
-  itkDiscreteGaussianImageFilterTest.cxx
-  itkMedianImageFilterTest.cxx
-  itkSmoothingHeaderTest.cxx
+  itkDataBaseImageIOTest.cxx
+  itkMongoDataBaseImageIOTest.cxx
+  itkMongoDataBaseInterfaceTest.cxx
   )
 
 add_executable(${KIT}TestDriver ${KIT}TestDriver.cxx ${Tests})

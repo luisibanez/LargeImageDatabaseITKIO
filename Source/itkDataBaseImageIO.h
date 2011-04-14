@@ -85,11 +85,14 @@ public:
 
   /** Specific DataBase API */
 
+  typedef std::vector<double>   PointType;
+  typedef std::vector<double>   VectorType;
+
   /** Get how many resolution levels there are in this collection. */
   unsigned int GetNumberOfResolutionLevels() const;
 
   /** Get origin, spacing, orientation, size of the given resolution level. */
-  Region GetInformationFromResolutionLevel( unsigned int );
+  ImageBase::ConstPointer GetInformationFromResolutionLevel( unsigned int );
 
   /** Focus the reader in a specific resolution level. Throws exception if
    * resolutionLevel doesn't exist. You must call this only after checking with
@@ -97,8 +100,11 @@ public:
   void SelectResolutionLevel( unsigned int resolutionLevel );
 
   /** Helper method to compute the requested region by giving to it physical coordinates. */
-  void SetRequestedPhysicalRegion( std::vector<double> cornerPoint1, std::vector<double> diagonalVector );
-  void SetRequestedPhysicalRegion( std::vector<double> cornerPoint1, std::vector<double> cornerPoint2 );
+  void SetRequestedPhysicalRegion( const PointType & cornerPoint1, const VectorType & diagonalVector );
+  void SetRequestedPhysicalRegion( const PointType & cornerPoint1, const PointType  & cornerPoint2 );
+
+  /** Report what region is currently being requested. */
+  ImageIORegion GetRequestedRegion() const;
 
 protected:
   DataBaseImageIO();
