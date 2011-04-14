@@ -18,20 +18,20 @@
 #include <iostream>
 #include <client/dbclient.h>
 
-#ifndef __itkMongoInterface_h
-#define __itkMongoInterface_h
+#ifndef __itkMongoDataBaseInterface_h
+#define __itkMongoDataBaseInterface_h
 
 namespace itk
 {
 
-class MongoInterface
+class MongoDataBaseInterface
 {
     mongo::DBClientConnection conn;
 
 public:
 
     // Constructor
-    MongoInterface()  {}
+    MongoDataBaseInterface()  {}
 
     typedef auto_ptr<mongo::DBClientCursor>  CursorPointer;
 

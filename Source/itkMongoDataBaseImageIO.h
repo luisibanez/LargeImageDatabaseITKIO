@@ -25,6 +25,7 @@
 
 #include <fstream>
 #include "itkImageIOBase.h"
+#include "itkMongoDataBaseInterface.h"
 
 namespace itk
 {
@@ -75,13 +76,15 @@ public:
    * that the IORegions has been set properly. */
   virtual void Write(const void* buffer);
 
-/** Method for supporting streaming.  Given a requested region, determine what
- * could be the region that we can read from the file. This is called the
- * streamable region, which will be smaller than the LargestPossibleRegion and
- * greater or equal to the RequestedRegion */
+  /** Method for supporting streaming.  Given a requested region, determine what
+   * could be the region that we can read from the file. This is called the
+   * streamable region, which will be smaller than the LargestPossibleRegion and
+   * greater or equal to the RequestedRegion */
   virtual ImageIORegion
   GenerateStreamableReadRegionFromRequestedRegion( const ImageIORegion & requested ) const;
 
+  /** Connect to Mongo Data Base interface object. */
+  void SetDataBaseInterface( MongoDataBaseInterface * );
 
 protected:
   MongoDataBaseImageIO();
@@ -92,6 +95,7 @@ private:
   MongoDataBaseImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  MongoDataBaseInterface *  m_DataBaseInterface;
 };
 
 } // end namespace itk

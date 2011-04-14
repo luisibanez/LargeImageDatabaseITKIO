@@ -14,11 +14,11 @@
  */
 
 #include <iostream>
-#include "itkMongoInterface.h"
+#include "itkMongoDataBaseInterface.h"
 
 namespace itk {
 
-int MongoInterface::Connect(std::string server, std::string port)
+int MongoDataBaseInterface::Connect(std::string server, std::string port)
 {
     // Build the connection string
     std::string connstring(server);
@@ -42,7 +42,7 @@ int MongoInterface::Connect(std::string server, std::string port)
       }
 }
 
-int vtkMongoInterface::Insert(const char * path, mongo::BSONObj  obj)
+int MongoDataBaseInterface::Insert(const char * path, mongo::BSONObj  obj)
 {
     try
       {
@@ -57,7 +57,7 @@ int vtkMongoInterface::Insert(const char * path, mongo::BSONObj  obj)
 }
 
 
-int vtkMongoInterface::Insert(const char * name , int num )
+int MongoDataBaseInterface::Insert(const char * name , int num )
 {
     try
       {
@@ -75,13 +75,13 @@ int vtkMongoInterface::Insert(const char * name , int num )
 }
 
 
-auto_ptr<mongo::DBClientCursor> vtkMongoInterface::Query(const char * col, const char *qry )
-{     
+auto_ptr<mongo::DBClientCursor> MongoDataBaseInterface::Query(const char * col, const char *qry )
+{
   return this->conn.query(col, mongo::Query(qry));
 }
 
 
-int vtkMongoInterface::Result(int i, mongo::BSONObj * res)
+int MongoDataBaseInterface::Result(int i, mongo::BSONObj * res)
 {
   return 0;
 }
