@@ -20,7 +20,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkIOCommon.h"
 #include "itkDataBaseImageIO.h"
 #include "itksys/SystemTools.hxx"
