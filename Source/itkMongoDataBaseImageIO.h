@@ -47,6 +47,7 @@ public:
   typedef SmartPointer<Self> Pointer;
 
   /** No NewMacro because this is an abstract class */
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MongoDataBaseImageIO, ImageIOBase);

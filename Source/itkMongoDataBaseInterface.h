@@ -12,23 +12,35 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+#ifndef __itkMongoDataBaseInterface_h
+#define __itkMongoDataBaseInterface_h
 
 // Include necessary headers for mongo \
 
 #include <iostream>
 #include <client/dbclient.h>
 
-#ifndef __itkMongoDataBaseInterface_h
-#define __itkMongoDataBaseInterface_h
+#include "itkDataBaseInterfaceBase.h"
+
 
 namespace itk
 {
 
-class MongoDataBaseInterface
+class MongoDataBaseInterface : public DataBaseInterfaceBase
 {
-    mongo::DBClientConnection conn;
-
 public:
+  /** Standard class typedefs. */
+  typedef MongoDataBaseInterface      Self;
+  typedef DataBaseInterfaceBase       Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    Pointer;
+
+  /** No NewMacro because this is an abstract class */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(MongoDataBaseInterface, DataBaseInterfaceBase);
+
 
     // Constructor
     MongoDataBaseInterface()  {}
@@ -41,6 +53,11 @@ public:
     int Insert(const char * path, mongo::BSONObj  obj);
     CursorPointer Query(const char * collection, const char  * query);
     int Result(int i, mongo::BSONObj * r);
+
+private:
+
+    mongo::DBClientConnection conn;
+
 };
 
 } // end namespace itk
