@@ -1,0 +1,8 @@
+This project is intended to implement IO classes for interfacing ITK to
+databases that store large images.
+
+Copyright Kitware
+
+Apache 2.0 License
+
+
