@@ -8,7 +8,7 @@ add_library(DataBaseImageIO
   itkMongoDataBaseInterface.cxx
   )
 
-target_link_library(DataBaseImageIO
+target_link_libraries( DataBaseImageIO
   ${ITK_LIBRARIES}
   ${MongoDB_LIBRARIES}
   # FIXME See what to do with Boost dependencies
