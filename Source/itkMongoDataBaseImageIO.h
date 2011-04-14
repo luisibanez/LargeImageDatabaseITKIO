@@ -42,9 +42,10 @@ class ITK_EXPORT MongoDataBaseImageIO : public ImageIOBase
 {
 public:
   /** Standard class typedefs. */
-  typedef MongoDataBaseImageIO    Self;
-  typedef ImageIOBase        Superclass;
-  typedef SmartPointer<Self> Pointer;
+  typedef MongoDataBaseImageIO      Self;
+  typedef ImageIOBase               Superclass;
+  typedef SmartPointer<Self>        Pointer;
+  typedef SmartPointer<const Self>  ConstPointer;
 
   /** No NewMacro because this is an abstract class */
   itkNewMacro(Self);

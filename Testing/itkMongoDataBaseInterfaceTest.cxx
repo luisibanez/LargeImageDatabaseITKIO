@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-#include "itkDataBaseImageIO.h"
+#include "itkMongoDataBaseInterface.h"
 #include "itkTestingMacros.h"
 
 int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )

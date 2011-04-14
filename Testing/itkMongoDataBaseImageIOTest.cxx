@@ -1,74 +1,83 @@
-/*    Copyright 2010  Kitware Inc.
+/*=========================================================================
  *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ *  Copyright Insight Software Consortium
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 
 #include <iostream>
-#include "itkMongoInterface.h"
+#include "itkMongoDataBaseImageIO.h"
 
 
-// Define a test structure
-struct somedata
+int itkMongoDataBaseImageIOTest( int argc, const char * argv [] )
 {
-    int a;
-    double b,c,d;
-    char name[12];
-};
 
+  if( argc < 2 )
+    {
+    std::cerr << "Missing parameters" << std::endl;
+    return EXIT_FAILURE;
+    }
 
-int main( int argc, const char **argv )
-{
-    itkMongoInterface mongoint;
+  typedef itk::MongoDataBaseImageIO   ImageIOType;
 
-    mongoint.connect();
-    //mongoint.connect("192.168.32.4");
-    mongoint.insert("DJ" , 125 );
+  ImageIOType::Pointer imageIO = ImageIOType::New();
 
+  TEST_SET_GET_VALUE( false, imageIO->CanReadFile("non-exiting-file") );
 
-    // test BSON Creation
-    mongo::BSONObjBuilder b;
-    b.append("name", "Joe");
-    b.append("age", 33);
-    mongo::BSONObj p = b.obj();
+  TEST_SET_GET_VALUE( true, imageIO->CanReadFile( argv[1] ) );
 
-    // test BSON insertion
-    mongoint.insert("DJ", p);
+  imageIO->ReadImageInformation();
 
-    // Create a structure
-    somedata myData;
-    myData.a = 54;
-    myData.b = 3.1415616;
-    myData.c = 0.99;
-    myData.d = 1.1;
-    strcpy(myData.name , "Dhanannjay");
+  // FIXME, check here for right origin, spacing, orientation and size.
 
-    // Insert struct in BSON
+  itk::ImageIORegion region;
 
-    mongo::BSONObjBuilder bin;
-    bin.appendBinData("somedata",sizeof(somedata),  mongo::BinDataGeneral, (char *) &myData );
-    //cout << bin.len()<< ", " << sizeof(somedata) ;
+  // Request region from (0,0) to (100,100)
+  region.push_back(0);
+  region.push_back(100);
+  region.push_back(0);
+  region.push_back(100);
 
-    mongoint.insert("DJ.objs", bin.obj());
+  imageIO->ReadImageInformation( region );
 
-    auto_ptr<mongo::DBClientCursor> cur = mongoint.query("brainbow.0", "{level : {'$lt' : 2 } }");
+  TEST_SET_GET_VALUE( 1, imageIO->GetNumberOfResolutionLevels() );
 
-    while(cur->more())
-      {
-        mongo::BSONObj b = cur->next();
-        cout << b.getStringField("name") << endl;
-        cout << b.getIntField("xs") << endl;
+  imageIO->SetResolutionLevel(0);
 
-      }
+  itk::ImageIOBase::Pointer imageGrid = imageIO->GetInformationFromResolutionLevel(0); // FIXME this method may be redundant with GenerateOutputInformation()...
 
+  typedef itk::DataBaseImageIOTest::PointType     PointType;
+  typedef itk::DataBaseImageIOTest::VectorType    VectorType;
 
+  PointType corner1;
+  PointType corner2;
+
+  ImageIORegion requestedRegion;
+
+  imageIO->SetRequestedPhysicalRegion( corner1, corner2 );
+
+  requestedRegion = imageIO->GetRequestedRegion();
+
+  // FIXME add here comparison with correct values
+
+  VectorType diagonal;
+
+  imageIO->SetRequestedPhysicalRegion( corner1, diagonal );
+
+  requestedRegion = imageIO->GetRequestedRegion();
+
+  // FIXME add here comparison with correct values
+
+  return EXIT_SUCCESS;
 }
