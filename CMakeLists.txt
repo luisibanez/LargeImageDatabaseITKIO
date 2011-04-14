@@ -4,6 +4,10 @@ project( LargeImageDatabaseITKIO )
 
 find_package(ITK REQUIRED)
 
+if( ITK_FOUND )
+  include( ${ITK_USE_FILE} )
+endif()
+
 set( CMAKE_MODULE_PATH
   "${LargeImageDatabaseITKIO_SOURCE_DIR}/CMake"
   ${CMAKE_MODULE_PATH}
