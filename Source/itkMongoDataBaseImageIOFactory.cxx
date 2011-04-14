@@ -16,37 +16,37 @@
  *
  *=========================================================================*/
 
-#include "itkDataBaseImageIOFactory.h"
+#include "itkMongoDataBaseImageIOFactory.h"
 #include "itkCreateObjectFunction.h"
-#include "itkDataBaseImageIO.h"
+#include "itkMongoDataBaseImageIO.h"
 #include "itkVersion.h"
 
 
 namespace itk
 {
-DataBaseImageIOFactory::DataBaseImageIOFactory()
+MongoDataBaseImageIOFactory::MongoDataBaseImageIOFactory()
 {
   this->RegisterOverride("itkImageIOBase",
-                         "itkDataBaseImageIO",
-                         "DataBase Image IO",
+                         "itkMongoDataBaseImageIO",
+                         "MongoDataBase Image IO",
                          1,
-                         CreateObjectFunction<DataBaseImageIO>::New());
+                         CreateObjectFunction<MongoDataBaseImageIO>::New());
 }
 
-DataBaseImageIOFactory::~DataBaseImageIOFactory()
+MongoDataBaseImageIOFactory::~MongoDataBaseImageIOFactory()
 {
 }
 
 const char*
-DataBaseImageIOFactory::GetITKSourceVersion() const
+MongoDataBaseImageIOFactory::GetITKSourceVersion() const
 {
   return ITK_SOURCE_VERSION;
 }
 
 const char*
-DataBaseImageIOFactory::GetDescription() const
+MongoDataBaseImageIOFactory::GetDescription() const
 {
-  return "DataBase ImageIO Factory, allows the loading of DataBase images into insight";
+  return "MongoDataBase ImageIO Factory, allows the loading of MongoDataBase images into insight";
 }
 
 //
@@ -59,8 +59,8 @@ __declspec( dllexport )
 #endif
   itk::ObjectFactoryBase* itkLoad()
 {
-  std::cout << "Calling DataBaseImageIO itkLoad()" << std::endl;
-  return itk::DataBaseImageIOFactory::FactoryNew();
+  std::cout << "Calling MongoDataBaseImageIO itkLoad()" << std::endl;
+  return itk::MongoDataBaseImageIOFactory::FactoryNew();
 }
 
 

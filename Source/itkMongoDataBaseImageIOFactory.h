@@ -15,23 +15,23 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef __itkDataBaseImageIOFactory_h
-#define __itkDataBaseImageIOFactory_h
+#ifndef __itkMongoDataBaseImageIOFactory_h
+#define __itkMongoDataBaseImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 
 namespace itk
 {
-/** \class DataBaseImageIOFactory
- * \brief DataBase : Intended to interface to image databases.
+/** \class MongoDataBaseImageIOFactory
+ * \brief MongoDataBase : Intended to interface to image databases.
 
  */
-class ITK_EXPORT DataBaseImageIOFactory : public ObjectFactoryBase
+class ITK_EXPORT MongoDataBaseImageIOFactory : public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef DataBaseImageIOFactory   Self;
+  typedef MongoDataBaseImageIOFactory   Self;
   typedef ObjectFactoryBase        Superclass;
   typedef SmartPointer<Self>       Pointer;
   typedef SmartPointer<const Self> ConstPointer;
@@ -42,24 +42,24 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
-  static DataBaseImageIOFactory* FactoryNew() { return new DataBaseImageIOFactory;}
+  static MongoDataBaseImageIOFactory* FactoryNew() { return new MongoDataBaseImageIOFactory;}
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DataBaseImageIOFactory, ObjectFactoryBase);
+  itkTypeMacro(MongoDataBaseImageIOFactory, ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory()
     {
-    DataBaseImageIOFactory::Pointer metaFactory = DataBaseImageIOFactory::New();
+    MongoDataBaseImageIOFactory::Pointer metaFactory = MongoDataBaseImageIOFactory::New();
     ObjectFactoryBase::RegisterFactory(metaFactory);
     }
 
 protected:
-  DataBaseImageIOFactory();
-  ~DataBaseImageIOFactory();
+  MongoDataBaseImageIOFactory();
+  ~MongoDataBaseImageIOFactory();
 
 private:
-  DataBaseImageIOFactory(const Self&); //purposely not implemented
+  MongoDataBaseImageIOFactory(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 };
