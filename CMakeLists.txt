@@ -21,4 +21,10 @@ include_directories( BEFORE
 
 add_subdirectory( src )
 add_subdirectory( test )
-# add_subdirectory( Documents )
+
+
+option(BUILD_REPORTS "Build Reproducible Reports." OFF)
+
+if( BUILD_REPORTS )
+  add_subdirectory( documents )
+endif()
