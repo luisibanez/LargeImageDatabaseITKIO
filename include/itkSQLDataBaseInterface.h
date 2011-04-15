@@ -35,44 +35,45 @@ public:
   typedef SmartPointer<Self>          Pointer;
   typedef SmartPointer<const Self>    Pointer;
 
-  /** No NewMacro because this is an abstract class */
-  itkNewMacro(Self);
-
   /** Run-time type information (and related methods). */
   itkTypeMacro(SQLDataBaseInterface, DataBaseInterfaceBase);
 
   // Operations possible
-  virtual void SetUsername( const std::string & username );
-  virtual void SetPassword( const std::string & password );
-  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"));
-  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"), const std::string & username, const std::string & password);
-  virtual void Insert(const std::string path, const char * data, size_t size);
-  virtual void SetQuery(const std::string & query);
-  virtual IdentifierType ExecuteQuery(const std::string & collection );
-
-  // FIXME: Consider using SmartPointers, or AutoPointers here.
-  virtual void GetRecord(IdentifierType id, char ** data );
-
-  virtual IdentifierType GetNumberOfFieldsInRecord(IdentifierType id ) = 0;
-
-  // This function is intended to be connected via the SetProcessRecordCallback() method.
-  // It should implement the translation of data from the DataBase underlying data structures
-  // into some other data structure that is then exposed in this API.
-  // In the case of SQLDB, we may decide to simply use BSON for both, and therefore avoid
-  // copying the record fields.
-  static void ProcessRecordCallback(void);
-
-
-  virtual void Disconnect();
-
+  // FIXME check itkSetMacro with std::string
+  void SetUsername( const std::string & username )
+    {
+    if( ( !username.empty() ) && ( m_User.compare( username ) != 0 ) )
+      {
+      m_User = username;
+      this->Modified();
+      }
+    }
+  void SetPassword( const std::string & password )
+    {
+    if( ( !password.empty() ) && ( m_Password.compare( password ) != 0 ) )
+      {
+      m_Password = password;
+      this->Modified();
+      }
+    }
 
 protected:
 
     // Constructor
     SQLDataBaseInterface()  {}
-    ~SQLDataBaseInterface();
-    void PrintSelf(std::ostream& os, Indent indent) const;
+    virtual ~SQLDataBaseInterface() {}
 
+    void PrintSelf(std::ostream& os, Indent indent) const
+    {
+      // FIXME do we really want to print the password?
+      // security issue
+      Superclass::PrintSelf( os, indent );
+      os << "User: " << m_User << std::endl;
+      os << "Password: " << m_Password << std::endl;
+    }
+
+    std::string m_User;
+    std::string m_Password;
 
 private:
     SQLDataBaseInterface(const Self&); //purposely not implemented
