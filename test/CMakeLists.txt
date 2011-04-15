@@ -7,6 +7,8 @@ create_test_sourcelist(Tests ${KIT}TestDriver.cxx
   itkDataBaseImageIOTest.cxx
   itkMongoDataBaseImageIOTest.cxx
   itkMongoDataBaseInterfaceTest.cxx
+  itkMySQLDataBaseInterfaceTest.cxx
+  itkSQLDataBaseInterfaceTest.cxx
   )
 
 add_executable(${KIT}TestDriver ${KIT}TestDriver.cxx ${Tests})
