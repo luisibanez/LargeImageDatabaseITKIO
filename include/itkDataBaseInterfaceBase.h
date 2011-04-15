@@ -42,10 +42,45 @@ public:
   itkTypeMacro(DataBaseInterfaceBase, Object);
 
   // Operations possible
-  virtual int Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017")) = 0;
-  virtual int Insert(const char * path, const char * data, size_t size) = 0;
-  virtual int Query(const char * collection, const char * query) = 0;
-  virtual int Result( int i, const char * data ) = 0;
+  virtual void SetUsername( const std::string & username );
+  virtual void SetPassword( const std::string & password );
+  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017")) = 0;
+  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"), const std::string & username, const std::string & password) = 0;
+  virtual void Insert(const std::string & path, const char * data, size_t size) = 0;
+
+  /** This method is intended to be overloaded in derived classes that
+   * implement specific databases. */
+  virtual int SetQuery(const std::string & query );
+
+  /** You must call SetQuery() first...
+   * This method will return the number of records matching the query.
+   * The data from each record can the be extracted by calling
+   * GetRecord() with an identifier number. */
+  virtual IdentifierType ExecuteQuery(const std::string & collection)
+= 0;
+
+  /** The GetRecord() method will allocate the required memory, and IT
+   * IS THE RESPONSIBILITY of the caller to release the memory. */
+  // FIXME: Consider using SmartPointers, or AutoPointers here.
+  virtual void GetRecord(IdentifierType id, char ** data ) = 0;
+
+  virtual MetaDataDictionary GetRecordDescription(IdentifierType id ) = 0;
+
+  typedef void (callback)(IdentifierType id) OneRecordCallbackType
+  virtual void SetProcessRecordCallback( OneRecordCallbackType * callback );
+
+  // These two functions call the callback function that was provided
+  // in  SetProcessRecordCallback(). In the case of ProcessRecord(id)
+  // the callback function will be invoked only for the record identified by Id.
+  // In the case of ProcessAllRecords() the callback function will be invoked for
+  // each one of the records selected by the Query.
+  virtual void ProcessRecord(IdentifierType id);
+  virtual void ProcessAllRecords();
+
+  // BSON : Binary Serialized Object = Binary JSON
+  // http://bsonspec.org/
+
+  virtual void Disconnect() = 0;
 
 protected:
 

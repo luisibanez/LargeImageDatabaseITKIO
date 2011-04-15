@@ -40,42 +40,86 @@ int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
 
   std::string serverAndPort = "127.0.0.1:27017";
 
-  int outcome = interface->Connect( serverAndPort );
-
-  if( outcome == 0 )
+  try
     {
-    std::cout << "Connect succesful" << std::endl;
+    interface->Connect( serverAndPort );
     }
-  else
+  catch( itk::ExceptionObject & excep )
     {
     std::cerr << "Connect failed" << std::endl;
+    std::cerr << excep << std::endl;
     return EXIT_FAILURE;
     }
+
+  std::cout << "Connect succesful" << std::endl;
+    
 
   const char * pathToData = argv[2];
   double gineaPigValue = 3.141592;
 
-  outcome = interface->Insert( pathToData, (char *)(&gineaPigValue),sizeof(gineaPigValue) );
 
-  if( outcome == 0 )  // FIXME : make it consistent with the doc.
+  // Method 1
+  std::string username = "Linus Torvalds";
+  std::string password = "Penguin";
+  interface->Connect( serverAndPort, username, password );
+
+  // Method 2
+  interface->SetUsername( username );
+  interface->SetPassword( password );
+  interface->Connect( serverAndPort );
+
+  try
     {
-    std::cout << "Insert succesful" << std::endl;
+    interface->Insert( pathToData, (char *)(&gineaPigValue),sizeof(gineaPigValue) );
     }
-  else
+  catch( itk::ExceptionObject & excep )
     {
     std::cerr << "Insert failed" << std::endl;
+    std::cerr << excep << std::endl;
     return EXIT_FAILURE;
     }
+
+  std::cout << "Insert succesful" << std::endl;
+
+  // Expect Exception because no SetQuery() has been called yet. 
+  TRY_EXPECT_EXCEPTION( interface->ExecuteQuery( pathToData ) );
 
   // read the value back...
   std::string query; // FIXME : populate this query.
 
-  outcome = interface->Query( pathToData, query.c_str() )
+  interface->SetQuery( query.c_str() )
 
-  if( outcome == 0 )
+  itk::IdentifierType numberOfMatchingRecords = itk::NumericTraits< itk::IdentifierType >::Zero;
+
+  try
+    {
+    numberOfMatchingRecords = interface->ExecuteQuery( pathToData );
+    }
+  catch( itk::ExceptionObject & excep )
+    {
+    std::cerr << "Insert failed" << std::endl;
+    std::cerr << excep << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  std::cout << "ExecuteQuery succesful" << std::endl;
+
+
+  if( numberOfMatchingRecords == 0 )
     {
     std::cerr << "Insert failed" << std::endl;
     return EXIT_FAILURE;
+    }
+
+  char * dataBuffer;
+
+  for( itk::IdentifierType ri = 0; i < numberOfMatchingRecords; i++ )
+    {
+    interface->GetRecord( ri, &dataBuffer );
+
+    // It is our responsibility to delete this buffer here.
+    // FIXME: Consider using SmartPointers, or AutoPointers here.
+    delete [] dataBuffer;
     }
 
   std::cout << "Insert succesful" << std::endl;

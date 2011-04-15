@@ -45,10 +45,28 @@ public:
   itkTypeMacro(MongoDataBaseInterface, DataBaseInterfaceBase);
 
   // Operations possible
+  virtual void SetUsername( const std::string & username );
+  virtual void SetPassword( const std::string & password );
   virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"));
-  virtual int  Insert(const char * path, const char * data, size_t size);
-  virtual int  Query(const char * collection, const char * query);
-  virtual void Result( int i, char * data );
+  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"), const std::string & username, const std::string & password);
+  virtual void Insert(const std::string path, const char * data, size_t size);
+  virtual void SetQuery(const std::string & query);
+  virtual IdentifierType ExecuteQuery(const std::string & collection );
+
+  // FIXME: Consider using SmartPointers, or AutoPointers here.
+  virtual void GetRecord(IdentifierType id, char ** data );
+
+  virtual IdentifierType GetNumberOfFieldsInRecord(IdentifierType id ) = 0;
+
+  // This function is intended to be connected via the SetProcessRecordCallback() method.
+  // It should implement the translation of data from the DataBase underlying data structures
+  // into some other data structure that is then exposed in this API.
+  // In the case of MongoDB, we may decide to simply use BSON for both, and therefore avoid
+  // copying the record fields.
+  static void ProcessRecordCallback(void);
+
+
+  virtual void Disconnect();
 
 
 protected:
