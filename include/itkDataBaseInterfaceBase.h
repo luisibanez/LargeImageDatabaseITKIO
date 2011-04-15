@@ -18,6 +18,7 @@
 
 #include <iostream>
 
+#include "itkIntTypes.h"
 #include "itkObject.h"
 
 #ifndef __itkDataBaseInterfaceBase_h
@@ -33,7 +34,7 @@ public:
   typedef DataBaseInterfaceBase       Self;
   typedef Object                      Superclass;
   typedef SmartPointer<Self>          Pointer;
-  typedef SmartPointer<const Self>    Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** No NewMacro because this is an abstract class */
   itkNewMacro(Self);
@@ -66,7 +67,7 @@ public:
 
   virtual MetaDataDictionary GetRecordDescription(IdentifierType id ) = 0;
 
-  typedef void (callback)(IdentifierType id) OneRecordCallbackType
+  typedef void (callback)(IdentifierType id) OneRecordCallbackType;
   virtual void SetProcessRecordCallback( OneRecordCallbackType * callback );
 
   // These two functions call the callback function that was provided

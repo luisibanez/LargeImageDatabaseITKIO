@@ -56,10 +56,16 @@ void DataBaseImageIO::ReadImageInformation()
   this->SetPixelType( SCALAR );
   this->SetComponentType( UCHAR );
 
+  int nx =-1;
+  int ny =-1;
+  int nz =-1;
   this->SetDimensions( 0, nx );
   this->SetDimensions( 1, ny );
   this->SetDimensions( 2, nz );
 
+  double dx=-1.;
+  double dy=-1.;
+  double dz=-1.;
   this->SetSpacing( 0, dx );
   this->SetSpacing( 1, dy );
   this->SetSpacing( 2, dz );

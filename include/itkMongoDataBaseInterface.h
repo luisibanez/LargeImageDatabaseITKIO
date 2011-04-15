@@ -21,7 +21,7 @@
 // Include necessary headers for mongo
 
 #include <iostream>
-#include <client/dbclient.h>
+#include <mongo/client/dbclient.h>
 
 #include "itkDataBaseInterfaceBase.h"
 
