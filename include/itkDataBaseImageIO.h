@@ -100,7 +100,7 @@ public:
 
   /** Helper method to compute the requested region by giving to it physical coordinates. */
   void SetRequestedPhysicalRegion( const PointType & cornerPoint1, const VectorType & diagonalVector );
-  void SetRequestedPhysicalRegion( const PointType & cornerPoint1, const PointType  & cornerPoint2 );
+  void SetRequestedPhysicalRegion2( const PointType & cornerPoint1, const PointType  & cornerPoint2 );
 
   /** Report what region is currently being requested. */
   ImageIORegion GetRequestedRegion() const;
