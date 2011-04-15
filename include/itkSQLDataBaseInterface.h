@@ -18,10 +18,7 @@
 #ifndef __itkSQLDataBaseInterface_h
 #define __itkSQLDataBaseInterface_h
 
-// Include necessary headers for mongo
-
 #include <iostream>
-#include <client/dbclient.h>
 
 #include "itkDataBaseInterfaceBase.h"
 
@@ -80,10 +77,6 @@ protected:
 private:
     SQLDataBaseInterface(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
-
-    typedef auto_ptr<mongo::DBClientCursor>  CursorPointer;
-
-    mongo::DBClientConnection m_Connection;
 
 };
 

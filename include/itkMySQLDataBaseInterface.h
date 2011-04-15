@@ -18,23 +18,21 @@
 #ifndef __itkMySQLDataBaseInterface_h
 #define __itkMySQLDataBaseInterface_h
 
-// Include necessary headers for mongo
 
 #include <iostream>
-#include <client/dbclient.h>
 
-#include "itkDataBaseInterfaceBase.h"
+#include "itkSQLDataBaseInterface.h"
 
 
 namespace itk
 {
 
-class MySQLDataBaseInterface : public DataBaseInterfaceBase
+class MySQLDataBaseInterface : public SQLDataBaseInterface
 {
 public:
   /** Standard class typedefs. */
   typedef MySQLDataBaseInterface      Self;
-  typedef DataBaseInterfaceBase       Superclass;
+  typedef SQLDataBaseInterface        Superclass;
   typedef SmartPointer<Self>          Pointer;
   typedef SmartPointer<const Self>    Pointer;
 
@@ -42,7 +40,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MySQLDataBaseInterface, DataBaseInterfaceBase);
+  itkTypeMacro(MySQLDataBaseInterface, SQLDataBaseInterface );
 
   // Operations possible
   virtual void SetUsername( const std::string & username );
@@ -80,10 +78,6 @@ protected:
 private:
     MySQLDataBaseInterface(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
-
-    typedef auto_ptr<mongo::DBClientCursor>  CursorPointer;
-
-    mongo::DBClientConnection m_Connection;
 
 };
 
