@@ -42,11 +42,65 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(MySQLDataBaseInterface, SQLDataBaseInterface );
 
+  void SetDataBaseName( const std::string& iDataBaseName )
+    {
+    if( ( !iDataBaseName.empty() ) &&
+        ( m_DataBaseName.compare( iDataBaseName ) != 0 ) )
+      {
+      m_DataBaseName = iDataBaseName;
+      this->Modified();
+      }
+    }
+
   // Operations possible
-  virtual void SetUsername( const std::string & username );
-  virtual void SetPassword( const std::string & password );
-  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"));
-  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"), const std::string & username, const std::string & password);
+  bool IsOpen() const
+    {
+    return ( this->m_Private->m_Connection != NULL );
+    }
+
+  bool Connect(const std::string & Server = std::string("127.0.0.1"),
+               const unsigned int& Port = 27017)
+    {
+    if( this->IsOpen() )
+      {
+      return true;
+      }
+    else
+      {
+      if( ( !Server.empty() ) && ( m_Server.compare( Server ) != 0 ) )
+        {
+        m_Server = Server;
+        }
+      if( m_Port != Port )
+        {
+        m_Port = Port;
+        }
+
+      if( m_Reconnect )
+        {
+        // reconnect ?
+        }
+
+      this->m_Private->m_Connection =
+        mysql_real_connect( &this->m_Private->NullConnection,
+          m_Server.c_str(),
+          m_User.c_str(),
+          m_Password.c_str(),
+          m_DatabaseName.c_str(),
+          m_Port,
+          0, // unix socket
+          0  // client_flag
+        );
+
+      if( this->m_Private->m_Connection == NULL )
+        {
+        itkGenericExceptionMacro( << "Connect() failed with error: "
+                                  << mysql_error( &this->m_Private->NullConnection ) );
+        return false;
+        }
+      return true;
+      }
+    }
   virtual void Insert(const std::string path, const char * data, size_t size);
   virtual void SetQuery(const std::string & query);
   virtual IdentifierType ExecuteQuery(const std::string & collection );
@@ -64,21 +118,57 @@ public:
   static void ProcessRecordCallback(void);
 
 
-  virtual void Disconnect();
+  void Disconnect()
+    {
+    if( !this->IsOpen() )
+      {
+      return;
+      }
+    else
+      {
+      mysql_close( this->m_Private->m_Connection );
+      this->m_Private->m_Connection = NULL;
+      }
+    }
 
 
 protected:
 
     // Constructor
-    MySQLDataBaseInterface()  {}
-    ~MySQLDataBaseInterface();
-    void PrintSelf(std::ostream& os, Indent indent) const;
+    MySQLDataBaseInterface() : Superclass(), m_Private( new MySQLDataBasePrivate )
+      {
+      }
+    ~MySQLDataBaseInterface()
+      {
+      // let's make sure the connection is closed
+      this->Disconnect();
+      delete this->m_Private;
+      }
 
+    void PrintSelf(std::ostream& os, Indent indent) const
+    {
+      Superclass::PrintSelf( os, indent );
+    }
+
+    unsigned int m_Port;
 
 private:
     MySQLDataBaseInterface(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
 
+    struct MySQLDataBasePrivate
+      {
+      MySQLDataBasePrivate() : m_Connection( NULL )
+        {
+        mysql_init( &this->m_NullConnection );
+        }
+      ~MySQLDataBasePrivate() {}
+
+      MYSQL m_NullConnection;
+      MYSQL *m_Connection;
+      };
+
+    MySQLDataBasePrivate* const m_Private;
 };
 
 } // end namespace itk
