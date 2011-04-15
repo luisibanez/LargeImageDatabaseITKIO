@@ -84,8 +84,6 @@ int itkDataBaseImageIOTest( int argc, const char * argv [] )
 
   imageIO->SetResolutionLevel(0);
 
-  itk::ImageIOBase::Pointer imageGrid = imageIO->GetInformationFromResolutionLevel(0); // FIXME this method may be redundant with GenerateOutputInformation()...
-
   typedef itk::DataBaseImageIOTest::PointType     PointType;
   typedef itk::DataBaseImageIOTest::VectorType    VectorType;
 

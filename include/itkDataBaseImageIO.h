@@ -88,15 +88,14 @@ public:
   typedef std::vector<double>   PointType;
   typedef std::vector<double>   VectorType;
 
-  /** Get how many resolution levels there are in this collection. */
+  /** Get how many resolution levels there are in this collection. FIXME: This
+   * method is a candidate to be moved to the ImageIOBase class. */
   unsigned int GetNumberOfResolutionLevels() const;
-
-  /** Get origin, spacing, orientation, size of the given resolution level. */
-  ImageBase::ConstPointer GetInformationFromResolutionLevel( unsigned int );
 
   /** Focus the reader in a specific resolution level. Throws exception if
    * resolutionLevel doesn't exist. You must call this only after checking with
-   * GetNumberOfResolutionLevels(). */
+   * GetNumberOfResolutionLevels(). Subsequent call to query methods such as
+   * GetSpacing(), GetOrigin() and GetOrigin(). */
   void SelectResolutionLevel( unsigned int resolutionLevel );
 
   /** Helper method to compute the requested region by giving to it physical coordinates. */

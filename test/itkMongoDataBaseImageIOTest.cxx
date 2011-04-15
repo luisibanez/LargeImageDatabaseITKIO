@@ -53,9 +53,23 @@ int itkMongoDataBaseImageIOTest( int argc, const char * argv [] )
 
   TEST_SET_GET_VALUE( 1, imageIO->GetNumberOfResolutionLevels() );
 
+  typedef std::vector<double> SpacingIOType;
+  typedef std::vector<double> OriginIOType;
+
+  SpacingIOType   spacing;
+  OriginIOType    origin;
+
+
   imageIO->SetResolutionLevel(0);
 
-  itk::ImageIOBase::Pointer imageGrid = imageIO->GetInformationFromResolutionLevel(0); // FIXME this method may be redundant with GenerateOutputInformation()...
+  spacing.push_back(  imageIO->GetSpacing(0) );
+  spacing.push_back(  imageIO->GetSpacing(1) );
+
+  origin.push_back(  imageIO->GetOrigin(0) );
+  origin.push_back(  imageIO->GetOrigin(1) );
+
+  TEST_SET_GET_VALUE( 1.5, spacing[0] );
+  TEST_SET_GET_VALUE( 1.5, spacing[1] );
 
   typedef itk::DataBaseImageIOTest::PointType     PointType;
   typedef itk::DataBaseImageIOTest::VectorType    VectorType;
