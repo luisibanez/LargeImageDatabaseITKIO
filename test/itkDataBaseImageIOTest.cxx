@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include "itkDataBaseImageIO.h"
+#include "itkTestingMacros.h"
 
 namespace itk {
 namespace DataBaseImageIOTest {
@@ -27,8 +28,11 @@ class FakeDataBaseImageIO : public DataBaseImageIO
 public:
   /** Standard class typedefs. */
   typedef FakeDataBaseImageIO     Self;
-  typedef ImageIOBase             Superclass;
+  typedef DataBaseImageIO         Superclass;
   typedef SmartPointer<Self>      Pointer;
+
+  typedef typename Superclass::PointType  PointType;
+  typedef typename Superclass::VectorType VectorType;
 
   /** Define the New method */
   itkNewMacro(Self);
@@ -73,24 +77,24 @@ int itkDataBaseImageIOTest( int argc, const char * argv [] )
   itk::ImageIORegion region;
 
   // Request region from (0,0) to (100,100)
-  region.push_back(0);
-  region.push_back(100);
-  region.push_back(0);
-  region.push_back(100);
+//  region.push_back(0);
+//  region.push_back(100);
+//  region.push_back(0);
+//  region.push_back(100);
 
-  imageIO->ReadImageInformation( region );
+//  imageIO->ReadImageInformation( region );
 
   TEST_SET_GET_VALUE( 1, imageIO->GetNumberOfResolutionLevels() );
 
-  imageIO->SetResolutionLevel(0);
+//  imageIO->SetResolutionLevel(0);
 
-  typedef itk::DataBaseImageIOTest::PointType     PointType;
-  typedef itk::DataBaseImageIOTest::VectorType    VectorType;
+  typedef itk::DataBaseImageIOTest::FakeDataBaseImageIO::PointType     PointType;
+  typedef itk::DataBaseImageIOTest::FakeDataBaseImageIO::VectorType    VectorType;
 
   PointType corner1;
   PointType corner2;
 
-  ImageIORegion requestedRegion;
+  itk::ImageIORegion requestedRegion;
 
   imageIO->SetRequestedPhysicalRegion( corner1, corner2 );
 

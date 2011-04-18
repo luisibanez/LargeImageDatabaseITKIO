@@ -19,6 +19,7 @@
 #include <iostream>
 
 #include "itkMongoDataBaseInterface.h"
+#include "itkNumericTraits.h"
 #include "itkTestingMacros.h"
 
 int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
@@ -52,7 +53,7 @@ int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
     }
 
   std::cout << "Connect succesful" << std::endl;
-    
+
 
   const char * pathToData = argv[2];
   double gineaPigValue = 3.141592;
@@ -81,15 +82,16 @@ int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
 
   std::cout << "Insert succesful" << std::endl;
 
-  // Expect Exception because no SetQuery() has been called yet. 
+  // Expect Exception because no SetQuery() has been called yet.
   TRY_EXPECT_EXCEPTION( interface->ExecuteQuery( pathToData ) );
 
   // read the value back...
   std::string query; // FIXME : populate this query.
 
-  interface->SetQuery( query.c_str() )
+  interface->SetQuery( query.c_str() );
 
-  itk::IdentifierType numberOfMatchingRecords = itk::NumericTraits< itk::IdentifierType >::Zero;
+  itk::IdentifierType numberOfMatchingRecords =
+      itk::NumericTraits< itk::IdentifierType >::Zero;
 
   try
     {
@@ -113,9 +115,9 @@ int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
 
   char * dataBuffer;
 
-  for( itk::IdentifierType ri = 0; i < numberOfMatchingRecords; i++ )
+  for( itk::IdentifierType i = 0; i < numberOfMatchingRecords; i++ )
     {
-    interface->GetRecord( ri, &dataBuffer );
+    interface->GetRecord( i, &dataBuffer );
 
     // It is our responsibility to delete this buffer here.
     // FIXME: Consider using SmartPointers, or AutoPointers here.
@@ -126,12 +128,12 @@ int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
 
   char * bufferAllocatedAndFilledFromDatabase;
 
-  interface->Result( 0, bufferAllocatedAndFilledFromDatabase );
+//  interface->Result( 0, bufferAllocatedAndFilledFromDatabase );
 
   double * gineaPigValueReturned =
     reinterpret_cast< double * >( bufferAllocatedAndFilledFromDatabase );
 
-  if( *gineaPigValueReturned != gineaPigValueReturned )
+  if( gineaPigValueReturned != gineaPigValueReturned )
     {
     std::cerr << "Double stored failed " << std::endl;
     return EXIT_FAILURE;

@@ -16,13 +16,13 @@
  *
  *=========================================================================*/
 
-#include <iostream>
+#ifndef __itkDataBaseInterfaceBase_h
+#define __itkDataBaseInterfaceBase_h
+
+#include <string>
 
 #include "itkIntTypes.h"
 #include "itkObject.h"
-
-#ifndef __itkDataBaseInterfaceBase_h
-#define __itkDataBaseInterfaceBase_h
 
 namespace itk
 {
@@ -36,22 +36,25 @@ public:
   typedef SmartPointer<Self>          Pointer;
   typedef SmartPointer<const Self>    ConstPointer;
 
-  /** No NewMacro because this is an abstract class */
-  itkNewMacro(Self);
-
   /** Run-time type information (and related methods). */
   itkTypeMacro(DataBaseInterfaceBase, Object);
 
   // Operations possible
   virtual void SetUsername( const std::string & username );
   virtual void SetPassword( const std::string & password );
-  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017")) = 0;
-  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"), const std::string & username, const std::string & password) = 0;
+
+  virtual void Connect( const std::string & serverAndPort =
+                       std::string("127.0.0.1:27017") ) = 0;
+
+  virtual void Connect( const std::string & serverAndPort,
+                       const std::string & username,
+                       const std::string & password ) = 0;
+
   virtual void Insert(const std::string & path, const char * data, size_t size) = 0;
 
   /** This method is intended to be overloaded in derived classes that
    * implement specific databases. */
-  virtual int SetQuery(const std::string & query );
+  virtual void SetQuery(const std::string & query ) = 0;
 
   /** You must call SetQuery() first...
    * This method will return the number of records matching the query.
@@ -60,6 +63,8 @@ public:
   virtual IdentifierType ExecuteQuery(const std::string & collection)
 = 0;
 
+  virtual IdentifierType GetNumberOfFieldsInRecord(IdentifierType id ) = 0;
+
   /** The GetRecord() method will allocate the required memory, and IT
    * IS THE RESPONSIBILITY of the caller to release the memory. */
   // FIXME: Consider using SmartPointers, or AutoPointers here.
@@ -67,8 +72,8 @@ public:
 
   virtual MetaDataDictionary GetRecordDescription(IdentifierType id ) = 0;
 
-  typedef void (callback)(IdentifierType id) OneRecordCallbackType;
-  virtual void SetProcessRecordCallback( OneRecordCallbackType * callback );
+  //typedef void (callback) (IdentifierType id) OneRecordCallbackType;
+  //virtual void SetProcessRecordCallback( OneRecordCallbackType * callback );
 
   // These two functions call the callback function that was provided
   // in  SetProcessRecordCallback(). In the case of ProcessRecord(id)

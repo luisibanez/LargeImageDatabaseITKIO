@@ -56,9 +56,17 @@ void MongoDataBaseImageIO::ReadImageInformation()
   this->SetPixelType( SCALAR );
   this->SetComponentType( UCHAR );
 
+  unsigned int nx = NumericTraits< unsigned int >::max();
+  unsigned int ny = nx;
+  unsigned int nz = nx;
+
   this->SetDimensions( 0, nx );
   this->SetDimensions( 1, ny );
   this->SetDimensions( 2, nz );
+
+  double dx = -1.;
+  double dy = -1.;
+  double dz = -1.;
 
   this->SetSpacing( 0, dx );
   this->SetSpacing( 1, dy );
@@ -131,7 +139,7 @@ ImageIORegion
 MongoDataBaseImageIO
 ::GenerateStreamableReadRegionFromRequestedRegion( const ImageIORegion & requested ) const
 {
-  // FIXME: talk to the database, figure out what is the smallest region that you can get from the database, and still fully contain the "requested" 
+  // FIXME: talk to the database, figure out what is the smallest region that you can get from the database, and still fully contain the "requested"
 
 
   // This will be the code if the database is a perfect streamer: meaning that it will deliver any subpiece that you ask for.

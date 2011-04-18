@@ -15,11 +15,13 @@ set( CMAKE_MODULE_PATH
 
 find_package(MongoDB REQUIRED)
 
+find_package( MySQL REQUIRED )
+
 include_directories( BEFORE
   ${LargeImageDatabaseITKIO_SOURCE_DIR}/include
+  ${MongoDB_INCLUDE_DIR}
+  ${MYSQL_INCLUDE_DIR}
 )
-
-find_package( MySQL REQUIRED )
 
 add_subdirectory( src )
 add_subdirectory( test )

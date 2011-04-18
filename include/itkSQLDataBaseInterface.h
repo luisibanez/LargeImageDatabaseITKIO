@@ -33,7 +33,7 @@ public:
   typedef SQLDataBaseInterface      Self;
   typedef DataBaseInterfaceBase       Superclass;
   typedef SmartPointer<Self>          Pointer;
-  typedef SmartPointer<const Self>    Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(SQLDataBaseInterface, DataBaseInterfaceBase);

@@ -18,72 +18,70 @@
 
 namespace itk {
 
-int MongoDataBaseInterface::Connect(const std::string & serverAndPort )
+void MongoDataBaseInterface::Connect(const std::string & serverAndPort )
 {
     // Build the connection string
-    std::string connstring(server);
-    connstring.append(":");
-    connstring.append(port);
-    connstring.append("\n");
+    std::string connstring(serverAndPort);
+//    connstring.append(":");
+//    connstring.append(port);
+//    connstring.append("\n");
 
     std::cout << connstring << endl;
 
     try
       {
       std::cout << "Here" << endl;
-      conn.connect(connstring);
+//      conn.connect(connstring);
       std::cout << "connected ok" << endl;
-      return 0;
       }
     catch( mongo::DBException &e )
       {
       std::cout << "caught " << e.what() << endl;
-      return 1;
       }
 }
 
-int MongoDataBaseInterface::Insert(const char * path, mongo::BSONObj  obj)
-{
-    try
-      {
-      conn.insert( path , obj);
-      return 0;
-      }
-    catch( mongo::DBException &e )
-      {
-      std::cout << "caught " << e.what() << endl;
-      return 1;
-      }
-}
+//int MongoDataBaseInterface::Insert(const char * path, mongo::BSONObj  obj)
+//{
+//    try
+//      {
+//      conn.insert( path , obj);
+//      return 0;
+//      }
+//    catch( mongo::DBException &e )
+//      {
+//      std::cout << "caught " << e.what() << endl;
+//      return 1;
+//      }
+//}
 
 
-int MongoDataBaseInterface::Insert(const char * name , int num )
-{
-    try
-      {
-      mongo::BSONObjBuilder obj;
-      obj.append( "name" , name );
-      obj.append( "num" , num );
-      conn.insert( "test.people" , obj.obj() );
-      return 0;
-      }
-    catch( mongo::DBException &e )
-    {
-        std::cout << "caught " << e.what() << endl;
-        return 1;
-    }
-}
+//int MongoDataBaseInterface::Insert(const char * name , int num )
+//{
+//    try
+//      {
+//      mongo::BSONObjBuilder obj;
+//      obj.append( "name" , name );
+//      obj.append( "num" , num );
+//      conn.insert( "test.people" , obj.obj() );
+//      return 0;
+//      }
+//    catch( mongo::DBException &e )
+//    {
+//        std::cout << "caught " << e.what() << endl;
+//        return 1;
+//    }
+//}
 
 
-auto_ptr<mongo::DBClientCursor> MongoDataBaseInterface::Query(const char * col, const char *qry )
-{
-  return this->conn.query(col, mongo::Query(qry));
-}
+//auto_ptr<mongo::DBClientCursor> MongoDataBaseInterface::Query(const char * col, const char *qry )
+//{
+//  return this->conn.query(col, mongo::Query(qry));
+//}
 
 
-int MongoDataBaseInterface::Result(int i, mongo::BSONObj * res)
-{
-  return 0;
-}
+//int MongoDataBaseInterface::Result(int i, mongo::BSONObj * res)
+//{
+//  return 0;
+//}
 
 } // end namespace itk

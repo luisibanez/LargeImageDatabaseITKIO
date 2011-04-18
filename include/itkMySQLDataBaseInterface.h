@@ -22,7 +22,9 @@
 #include <iostream>
 
 #include "itkSQLDataBaseInterface.h"
+#include "mysql.h" // needed for MYSQL typedefs
 
+#include "itkObjectFactory.h"
 
 namespace itk
 {
@@ -34,7 +36,7 @@ public:
   typedef MySQLDataBaseInterface      Self;
   typedef SQLDataBaseInterface        Superclass;
   typedef SmartPointer<Self>          Pointer;
-  typedef SmartPointer<const Self>    Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** No NewMacro because this is an abstract class */
   itkNewMacro(Self);

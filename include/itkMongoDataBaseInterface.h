@@ -15,15 +15,16 @@
  *  limitations under the License.
  *
  *=========================================================================*/
+
 #ifndef __itkMongoDataBaseInterface_h
 #define __itkMongoDataBaseInterface_h
 
 // Include necessary headers for mongo
 
-#include <iostream>
 #include <mongo/client/dbclient.h>
 
 #include "itkDataBaseInterfaceBase.h"
+#include "itkObjectFactory.h"
 
 
 namespace itk
@@ -36,7 +37,7 @@ public:
   typedef MongoDataBaseInterface      Self;
   typedef DataBaseInterfaceBase       Superclass;
   typedef SmartPointer<Self>          Pointer;
-  typedef SmartPointer<const Self>    Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** No NewMacro because this is an abstract class */
   itkNewMacro(Self);
@@ -48,15 +49,21 @@ public:
   virtual void SetUsername( const std::string & username );
   virtual void SetPassword( const std::string & password );
   virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"));
-  virtual void Connect(const std::string & serverAndPort = std::string("127.0.0.1:27017"), const std::string & username, const std::string & password);
-  virtual void Insert(const std::string path, const char * data, size_t size);
+  virtual void Connect( const std::string & serverAndPort,
+                       const std::string & username,
+                       const std::string & password ) {}
+
+  virtual void Insert(const std::string& path, const char * data, size_t size) {}
   virtual void SetQuery(const std::string & query);
+
+  virtual MetaDataDictionary GetRecordDescription(IdentifierType id );
+
   virtual IdentifierType ExecuteQuery(const std::string & collection );
 
   // FIXME: Consider using SmartPointers, or AutoPointers here.
   virtual void GetRecord(IdentifierType id, char ** data );
 
-  virtual IdentifierType GetNumberOfFieldsInRecord(IdentifierType id ) = 0;
+  virtual IdentifierType GetNumberOfFieldsInRecord(IdentifierType id );
 
   // This function is intended to be connected via the SetProcessRecordCallback() method.
   // It should implement the translation of data from the DataBase underlying data structures
