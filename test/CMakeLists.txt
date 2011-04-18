@@ -9,6 +9,7 @@ create_test_sourcelist(Tests ${KIT}TestDriver.cxx
   itkMongoDataBaseInterfaceTest.cxx
   itkMySQLDataBaseInterfaceTest.cxx
   itkSQLDataBaseInterfaceTest.cxx
+  itkHeaderTest.cxx
   )
 
 add_executable(${KIT}TestDriver ${KIT}TestDriver.cxx ${Tests})
@@ -20,3 +21,6 @@ add_test(NAME itkMongoDataBaseInterfaceTest
 
 add_test(NAME itkMongoDataBaseImageIOTest1
       COMMAND ${KIT}TestDriver itkMongoDataBaseImageIOTest1)
+
+add_test(NAME itkHeaderTest
+      COMMAND ${KIT}TestDriver itkHeaderTest)
