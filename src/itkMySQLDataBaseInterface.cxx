@@ -114,6 +114,117 @@ MySQLDataBaseInterface
 
 void
 MySQLDataBaseInterface
+::SetQuery( const std::string & iQuery )
+{
+  if( !iQuery.empty() )
+    {
+    itkGenericExceptionMacro( << "Empty Query" );
+    }
+
+  if( m_Query.compare( iQuery ) == 0 )
+    {
+    // this query has already been processed
+    return;
+    }
+  else
+    {
+    MYSQL* db = dbContainer->Private->Connection;
+    st_mysql_stmt statement = mysql_stmt_init( db );
+
+    if( statement == NULL )
+      {
+      itkGenericExceptionMacro( << "mysql_stmt_init returned out of memory error" );
+      return;
+      }
+
+    int status = mysql_stmt_prepare( statement,
+                                    iQuery.c_str(),
+                                    iQuery.size() );
+
+    if( status == 0 )
+      {
+      size_t nb_parameter =
+          static_cast< size_t >( mysql_stmt_param_count( statement ) );
+
+      m_UserParameters.resize( nb_parameter, NULL );
+      }
+    else
+      {
+      std::string error_message = std::string( mysql_stmt_error( statement ) );
+
+      itkGenericExceptionMacro( << "MySQLDataBaseInterface::SetQuery error "
+                                << error_message );
+      }
+    }
+}
+
+IdentifierType
+MySQLDataBaseInterface
+::ExecuteQuery(const std::string & collection)
+{
+  if( !this->IsOpen() )
+    {
+    itkGenericExceptionMacro( <<"Database is closed" );
+    return 0;
+    }
+
+  if( !m_Query.empty() )
+    {
+    MYSQL *db = dbContainer->Private->Connection;
+    assert(db != NULL);
+
+    int result = mysql_query( db, m_Query.c_str() );
+
+    if( result == 0 )
+      {
+      // The query probably succeeded.
+      st_mysql_res temp_result = mysql_store_result( db );
+      unsigned int field_count = mysql_field_count( db );
+
+      if( temp_result || field_count == 0 )
+        {
+        this->m_Active = ( field_count == 0 );
+        return;
+        }
+      else
+        {
+        this->m_Active = false;
+        std::string error_message( mysql_error( db ) );
+        itkGenericExceptionMacro( << "Query returned an error: "
+                                  << error_message );
+        return;
+        }
+      }
+    else
+      {
+      // result != 0; the query failed
+      this->m_Active = false;
+      std::string error_message( mysql_error( db ) );
+      itkGenericExceptionMacro( << "Query returned an error: "
+                                << error_message );
+      return;
+      }
+    }
+  else
+    {
+
+    }
+}
+
+bool
+MySQLDataBaseInterface
+::ValidPreparedStatementSQL( const std::string& iQuery )
+{
+  if( iQuery.empty() )
+    {
+    return false;
+    }
+
+
+}
+
+void
+MySQLDataBaseInterface
 ::Disconnect()
   {
   if( !this->IsOpen() )
