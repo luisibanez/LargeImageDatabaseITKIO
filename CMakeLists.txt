@@ -19,6 +19,8 @@ include_directories( BEFORE
   ${LargeImageDatabaseITKIO_SOURCE_DIR}/include
 )
 
+find_package( MySQL REQUIRED )
+
 add_subdirectory( src )
 add_subdirectory( test )
 
