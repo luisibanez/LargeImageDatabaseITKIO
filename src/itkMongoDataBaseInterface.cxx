@@ -18,13 +18,14 @@
 
 namespace itk {
 
-void MongoDataBaseInterface::Connect(const std::string & serverAndPort )
+bool MongoDataBaseInterface
+::Connect(const std::string & server, const std::string& port )
 {
     // Build the connection string
-    std::string connstring(serverAndPort);
-//    connstring.append(":");
-//    connstring.append(port);
-//    connstring.append("\n");
+    std::string connstring(server);
+    connstring.append(":");
+    connstring.append(port);
+    connstring.append("\n");
 
     std::cout << connstring << endl;
 
@@ -33,10 +34,12 @@ void MongoDataBaseInterface::Connect(const std::string & serverAndPort )
       std::cout << "Here" << endl;
 //      conn.connect(connstring);
       std::cout << "connected ok" << endl;
+      return true;
       }
     catch( mongo::DBException &e )
       {
       std::cout << "caught " << e.what() << endl;
+      return false;
       }
 }
 

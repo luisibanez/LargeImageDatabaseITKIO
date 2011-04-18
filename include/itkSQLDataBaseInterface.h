@@ -38,42 +38,37 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SQLDataBaseInterface, DataBaseInterfaceBase);
 
+  bool Connect( const std::string & server,
+                const std::string & port,
+                const std::string & username,
+                const std::string & password );
+
   // Operations possible
   // FIXME check itkSetMacro with std::string
-  void SetUsername( const std::string & username )
-    {
-    if( ( !username.empty() ) && ( m_User.compare( username ) != 0 ) )
-      {
-      m_User = username;
-      this->Modified();
-      }
-    }
-  void SetPassword( const std::string & password )
-    {
-    if( ( !password.empty() ) && ( m_Password.compare( password ) != 0 ) )
-      {
-      m_Password = password;
-      this->Modified();
-      }
-    }
+  void SetUsername( const std::string & username );
+
+  void SetPassword( const std::string & password );
 
 protected:
 
     // Constructor
-    SQLDataBaseInterface()  {}
-    virtual ~SQLDataBaseInterface() {}
+    SQLDataBaseInterface();
+    virtual ~SQLDataBaseInterface();
 
-    void PrintSelf(std::ostream& os, Indent indent) const
-    {
-      // FIXME do we really want to print the password?
-      // security issue
-      Superclass::PrintSelf( os, indent );
-      os << "User: " << m_User << std::endl;
-      os << "Password: " << m_Password << std::endl;
-    }
+    void PrintSelf(std::ostream& os, Indent indent) const;
 
     std::string m_User;
     std::string m_Password;
+
+    template<typename RT, typename T, typename Trait, typename Alloc>
+    RT ss_atoi( const std::basic_string<T, Trait, Alloc>& the_string )
+    {
+        std::basic_istringstream< T, Trait, Alloc> temp_ss(the_string);
+        RT num;
+        temp_ss >> num;
+        return num;
+    }
+
 
 private:
     SQLDataBaseInterface(const Self&); //purposely not implemented

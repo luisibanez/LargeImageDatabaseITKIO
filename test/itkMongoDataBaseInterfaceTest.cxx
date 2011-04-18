@@ -39,11 +39,12 @@ int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
   // FIXME: Figure out how to enable a server first...
   //
 
-  std::string serverAndPort = "127.0.0.1:27017";
+  std::string server = "127.0.0.1";
+  std::string port = "27017";
 
   try
     {
-    interface->Connect( serverAndPort );
+    interface->Connect( server, port );
     }
   catch( itk::ExceptionObject & excep )
     {
@@ -62,12 +63,12 @@ int iitkMongoDataBaseInterfaceTest( int argc, const char * argv [] )
   // Method 1
   std::string username = "Linus Torvalds";
   std::string password = "Penguin";
-  interface->Connect( serverAndPort, username, password );
+  interface->Connect( server, port, username, password );
 
   // Method 2
   interface->SetUsername( username );
   interface->SetPassword( password );
-  interface->Connect( serverAndPort );
+  interface->Connect( server, port );
 
   try
     {

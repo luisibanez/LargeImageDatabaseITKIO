@@ -43,10 +43,11 @@ public:
   virtual void SetUsername( const std::string & username );
   virtual void SetPassword( const std::string & password );
 
-  virtual void Connect( const std::string & serverAndPort =
-                       std::string("127.0.0.1:27017") ) = 0;
+  virtual bool Connect( const std::string & server = std::string("127.0.0.1"),
+                        const std::string & port = std::string ("27017") ) = 0;
 
-  virtual void Connect( const std::string & serverAndPort,
+  virtual bool Connect( const std::string & server,
+                       const std::string & port,
                        const std::string & username,
                        const std::string & password ) = 0;
 

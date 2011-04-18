@@ -6,6 +6,7 @@ add_library(DataBaseImageIO
   itkMongoDataBaseImageIO.cxx
   itkMongoDataBaseImageIOFactory.cxx
   itkMongoDataBaseInterface.cxx
+  itkSQLDataBaseInterface.cxx
   )
 
 target_link_libraries( DataBaseImageIO

@@ -61,7 +61,7 @@ public:
     }
 
   bool Connect(const std::string & Server = std::string("127.0.0.1"),
-               const unsigned int& Port = 27017)
+               const std::string & Port = std::string( "27017" ) )
     {
     if( this->IsOpen() )
       {
@@ -73,7 +73,9 @@ public:
         {
         m_Server = Server;
         }
-      if( m_Port != Port )
+      unsigned int t_port = ss_atoi< unsigned int >( Port );
+
+      if( m_Port != t_port )
         {
         m_Port = Port;
         }
@@ -86,8 +88,8 @@ public:
       this->m_Private->m_Connection =
         mysql_real_connect( &this->m_Private->NullConnection,
           m_Server.c_str(),
-          m_User.c_str(),
-          m_Password.c_str(),
+          this->m_User.c_str(),
+          this->m_Password.c_str(),
           m_DatabaseName.c_str(),
           m_Port,
           0, // unix socket
@@ -152,6 +154,7 @@ protected:
       Superclass::PrintSelf( os, indent );
     }
 
+    std::string m_DataBaseName;
     unsigned int m_Port;
 
 private:
